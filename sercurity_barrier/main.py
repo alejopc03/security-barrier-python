@@ -53,7 +53,7 @@ def main():
     # -------------------- Load Inference Engine --------------------- #
     log.info("Loading Inference Engine...")
     plugin = IEPlugin(device=device)
-    ie = IECore()
+    #ie = IECore()
     
     # Load IR Models
     log.info("Loading detection model:\n\t{}\n\t{}".format(detection_model_xml, detection_model_bin))
