@@ -109,7 +109,7 @@ venv.bak/
 *.mp4
 
 # vscode settings
-/.vscode
+.vscode/
 
 # pycharm settings
 .idea/
