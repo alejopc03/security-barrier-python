@@ -20,7 +20,7 @@ from openvino.inference_engine import IECore
 
 from security_barrier.pipelining.models import AsyncWrapper, IEModel
 from security_barrier.pipelining.steps.base import PipelineStep
-from security_barrier.pipelining.queue import AsyncQueue
+from security_barrier.pipelining.queue import AsyncQueue, Signal
 
 
 class VehicleAttributesStep(PipelineStep):
@@ -59,6 +59,11 @@ class VehicleAttributesStep(PipelineStep):
         #TODO: Frame post processing?
         timers[self.__class__.__name__] = self.own_time.last
         return frame, detection_results, attributes_results, timers
+
+
+    def end(self):
+        print("sending stop to inference step")
+        self.sendInferenceQueue.put(Signal.STOP)
 
 
     def _preprocessInput(self, frame, detectedObject):

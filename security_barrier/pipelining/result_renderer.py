@@ -67,10 +67,8 @@ class ResultRenderer(object):
             fps = 1000 / (inference_time + 1e-6)
             text_loc = (TEXT_LEFT_MARGIN, TEXT_VERTICAL_INTERVAL)
             cv2.putText(frame, "Inference time: {:.2f}ms ({:.2f} FPS)".format(inference_time, fps), text_loc, FONT_STYLE, FONT_SIZE, FONT_COLOR)
-        print("Before imshow")
-        print("Frame shape: {}".format(frame.shape))
-        cv2.imshow("Vehicle Detection", frame)
 
+        cv2.imshow("Vehicle Detection", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return -1
 

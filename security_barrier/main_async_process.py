@@ -21,8 +21,6 @@ import os
 import logging as log
 from argparse import ArgumentParser
 
-import cv2
-
 from security_barrier.pipelining.steps.data import DataStep
 from security_barrier.pipelining.steps.detection import VehicleDetectionStep
 from security_barrier.pipelining.steps.attributes import VehicleAttributesStep
@@ -70,7 +68,7 @@ def main():
     inferencePipeline.addStep("Data", dataStep, isAsync=True)
     inferencePipeline.addStep("Detection", detectionStep, isAsync=True)
     inferencePipeline.addStep("Attributes", attributesStep, isAsync=True)
-    renderer = ResultRenderer()
+    renderer = ResultRenderer(display_fps=True)
     inferencePipeline.addStep("Render", RenderStep(renderer.render_frame, fps=30), isAsync=True)
     inferencePipeline.addExtraAsyncStep("Inference", inferenceStep)
 
@@ -78,7 +76,8 @@ def main():
     log.info("Running inference pipeline")
     inferencePipeline.run()
     inferencePipeline.close()
-    inferencePipeline.printStatistics()
+    # Statistics wont work until timers are multi-processed
+    #inferencePipeline.printStatistics()
 
 
 if __name__ == '__main__':
