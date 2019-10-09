@@ -14,9 +14,8 @@
  limitations under the License.
 """
 
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 from functools import partial
-from itertools import islice
 
 from .meters import WindowAverageMeter
 
@@ -36,6 +35,7 @@ class ResultRenderer(object):
         self.display_fps = display_fps
         self.output_height = output_height
         self.meters = defaultdict(partial(WindowAverageMeter, 16))
+        cv2.startWindowThread()
         print("To close the application, press 'CTRL+C' here or switch to the output window and press any key")
 
 
@@ -67,7 +67,8 @@ class ResultRenderer(object):
             fps = 1000 / (inference_time + 1e-6)
             text_loc = (TEXT_LEFT_MARGIN, TEXT_VERTICAL_INTERVAL)
             cv2.putText(frame, "Inference time: {:.2f}ms ({:.2f} FPS)".format(inference_time, fps), text_loc, FONT_STYLE, FONT_SIZE, FONT_COLOR)
-
+        print("Before imshow")
+        print("Frame shape: {}".format(frame.shape))
         cv2.imshow("Vehicle Detection", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):

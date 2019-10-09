@@ -7,7 +7,8 @@ setup(
 
     install_requires = [
         'numpy>=1.12.0',
-        'cython'
+        'cython',
+        'opencv-python'
     ],
 
     package_data = {

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!\\usr\\bin\\env python
 
 # Simplified port of OpenVINO security-barrier demo
 
@@ -13,20 +13,20 @@ import time
 
 from openvino.inference_engine import IECore
 from pipeline.models import IEModel
-from pipeline.result_renderer import ResultRenderer
-from pipeline.queue import Signal
-from pipeline.pipeline import AsyncPipeline
+# from pipeline.result_renderer import ResultRenderer
+# from pipeline.queue import Signal
+# from pipeline.pipeline import AsyncPipeline
 
-import pipeline.steps
+# import pipeline.steps
 
 
 def build_argparser():
     parser = ArgumentParser(add_help=False)
     args = parser.add_argument_group('Options')
-    args.add_argument("-m1", "--model1", help="Required. Path to object detection .xml trained model.", type=str, default='{0}/models/object_detection/barrier/{1}/vehicle-license-plate-detection-barrier-0106.xml')
-    args.add_argument("-m2", "--model2", help="Required. Path to vehicle attributes .xml trained model.", type=str, default='{0}/models/object_attributes/vehicle/{1}/vehicle-attributes-recognition-barrier-0039.xml')
-    args.add_argument("-m3", "--model3", help="Required. Path to OCR .xml trained model.", type=str, default='{0}/models/optical_character_recognition/license_plate/{1}/license-plate-recognition-barrier-0001.xml')
-    args.add_argument("-i", "--input", help="Required. Path to video file or image. 'cam' for capturing video stream from camera", type=str, default='/home/pereiraa/projects/security-barrier-python/sercurity_barrier/test_video.mp4')
+    args.add_argument("-m1", "--model1", help="Required. Path to object detection .xml trained model.", type=str, default='{0}\\models\\object_detection\\barrier\\{1}\\vehicle-license-plate-detection-barrier-0106.xml')
+    args.add_argument("-m2", "--model2", help="Required. Path to vehicle attributes .xml trained model.", type=str, default='{0}\\models\\object_attributes\\vehicle\\{1}\\vehicle-attributes-recognition-barrier-0039.xml')
+    args.add_argument("-m3", "--model3", help="Required. Path to OCR .xml trained model.", type=str, default='{0}\\models\\optical_character_recognition\\license_plate\\{1}\\license-plate-recognition-barrier-0001.xml')
+    args.add_argument("-i", "--input", help="Required. Path to video file or image. 'cam' for capturing video stream from camera", type=str, default='\\home\\pereiraa\\projects\\security-barrier-python\\security_barrier\\test_video.mp4')
     args.add_argument("-d", "--device", help="Optional. Specify the target device to infer on; CPU, GPU, FPGA, HDDL, MYRIAD or HETERO: is "
                            "acceptable. The sample will look for a suitable plugin for device specified. Default "
                            "value is CPU", default="MYRIAD", type=str)
@@ -92,19 +92,19 @@ def main():
         assert os.path.isfile(args.input), "Specified input file doesn't exist"
 
     # -------------------- Create Pipeline --------------------- #
-    log.info("Creating inference pipeline...")
-    inferencePipeline = AsyncPipeline()
-    inferencePipeline.add_step("Data", pipeline.steps.DataStep(input_stream), parallel=False)
-    inferencePipeline.add_step("Detection", pipeline.steps.VehicleDetectionStep(detection_model), parallel=False)
-    inferencePipeline.add_step("Attributes", pipeline.steps.VehicleAttributesStep(attributes_model), parallel=False)
-    renderer = ResultRenderer()
-    inferencePipeline.add_step("Render", pipeline.steps.RenderStep(renderer.render_frame, fps=30), parallel=False)
-
-    # -------------------- Run Pipeline --------------------- #
-    log.info("Running inference pipeline...")
-    inferencePipeline.run()
-    inferencePipeline.close()
-    inferencePipeline.print_statistics()
+    # log.info("Creating inference pipeline...")
+    # inferencePipeline = AsyncPipeline()
+    # inferencePipeline.add_step("Data", pipeline.steps.DataStep(input_stream), parallel=False)
+    # inferencePipeline.add_step("Detection", pipeline.steps.VehicleDetectionStep(detection_model), parallel=False)
+    # inferencePipeline.add_step("Attributes", pipeline.steps.VehicleAttributesStep(attributes_model), parallel=False)
+    # renderer = ResultRenderer()
+    # inferencePipeline.add_step("Render", pipeline.steps.RenderStep(renderer.render_frame, fps=30), parallel=False)
+    #
+    # # -------------------- Run Pipeline --------------------- #
+    # log.info("Running inference pipeline...")
+    # inferencePipeline.run()
+    # inferencePipeline.close()
+    # inferencePipeline.print_statistics()
 
     #region Test pipeline single-threaded
     # -------------------- Create Pipeline --------------------- #

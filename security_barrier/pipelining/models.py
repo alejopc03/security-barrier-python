@@ -52,8 +52,9 @@ def preprocess_frame(frame):
     return frame
 
 
-class AsyncWrapper:
-    def __init__(self, ie_model, num_requests):
+class AsyncWrapper(object):
+    def __init__(self, ie_model, num_requests, step_name):
+        self.step_name = step_name
         self.net = ie_model
         self.num_requests = num_requests
 
@@ -61,6 +62,7 @@ class AsyncWrapper:
         self._req_ids = cycle(range(num_requests))
         self._result_ids = cycle(range(num_requests))
         self._frames = deque(maxlen=num_requests)
+
 
     def infer(self, model_input, frame=None):
         """Schedule current model input to infer, return last result"""
@@ -76,12 +78,14 @@ class AsyncWrapper:
         if self._result_ready:
             result_req_id = next(self._result_ids)
             result = self.net.wait_request(result_req_id)
-            return result, last_frame
+            return result, last_frame, self.step_name
         else:
-            return None, None
+            return None, None, self.step_name
 
 
-class IEModel:
+class IEModel(object):
+    """Represents a model in OpenVINO inference engine"""
+
     def __init__(self, model_xml, model_bin, ie_core, target_device, num_requests, labels=None, batch_size=1, prob_threshold=0.5):
         # Plugin initialization for specified device and load extensions library if specified
 
@@ -104,6 +108,7 @@ class IEModel:
         self.labels = labels
         self.prob_threshold = prob_threshold
 
+
     def infer(self, frame):
         input_data = {self.input_name: frame}
         infer_result = self.exec_net.infer(input_data)
@@ -113,10 +118,11 @@ class IEModel:
 
         return result
 
+
     def async_infer(self, frame, req_id):
         input_data = {self.input_name: frame}
         self.exec_net.start_async(request_id=req_id, inputs=input_data)
-        pass
+
 
     def wait_request(self, req_id):
         self.exec_net.requests[req_id].wait()
@@ -126,15 +132,3 @@ class IEModel:
             result[output_name] = infer_result[output_name]
             
         return result
-
-
-class ActionRecognitionSequential:
-    def __init__(self, encoder, decoder=None):
-        self.encoder = encoder
-        self.decoder = decoder
-
-    def infer(self, input):
-        if self.decoder is not None:
-            embeddigns = self.encoder.infer(input[0])
-            decoder_input = embeddigns.reshape(1, 16, 512)
-            return self.decoder.infer(decoder_input)

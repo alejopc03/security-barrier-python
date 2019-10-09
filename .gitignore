@@ -105,7 +105,11 @@ venv.bak/
 
 # Media files
 *.jpg
+*.png
 *.mp4
 
 # vscode settings
 /.vscode
+
+# pycharm settings
+.idea/

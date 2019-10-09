@@ -15,7 +15,7 @@
 """
 
 from enum import Enum
-from queue import Queue
+from multiprocessing import Queue
 
 
 class BaseQueue:
@@ -61,18 +61,14 @@ class AsyncQueue(BaseQueue):
 
     def close(self):
         self.finished = True
-        with self._queue.mutex:
-            self._queue.queue.clear()
-            self._queue.queue.append(Signal.STOP_IMMEDIATELY)
-            self._queue.unfinished_tasks = 0
-            self._queue.all_tasks_done.notify()
-            self._queue.not_full.notify()
-            self._queue.not_empty.notify()
+        self._queue.close()
+
 
     def get(self, block=True, timeout=None):
         if self.finished:
             return Signal.STOP_IMMEDIATELY
         return self._queue.get(block, timeout)
+
 
     def clear(self):
         while not self._queue.empty():
@@ -113,5 +109,5 @@ class Signal(Enum):
     EMPTY = 5
 
 
-def is_stop_signal(item):
+def isStopSignal(item):
     return item is Signal.STOP or item is Signal.STOP_IMMEDIATELY

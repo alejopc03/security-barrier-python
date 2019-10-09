@@ -19,7 +19,7 @@ def build_argparser():
     args.add_argument("-m1", "--model1", help="Required. Path to object detection .xml trained model.", type=str, default='{0}/models/object_detection/barrier/{1}/vehicle-license-plate-detection-barrier-0106.xml')
     args.add_argument("-m2", "--model2", help="Required. Path to vehicle attributes .xml trained model.", type=str, default='{0}/models/object_attributes/vehicle/{1}/vehicle-attributes-recognition-barrier-0039.xml')
     args.add_argument("-m3", "--model3", help="Required. Path to OCR .xml trained model.", type=str, default='{0}/models/optical_character_recognition/license_plate/{1}/license-plate-recognition-barrier-0001.xml')
-    args.add_argument("-i", "--input", help="Required. Path to video file or image. 'cam' for capturing video stream from camera", type=str, default='/home/pereiraa/projects/security-barrier-python/sercurity_barrier/test_video.mp4')
+    args.add_argument("-i", "--input", help="Required. Path to video file or image. 'cam' for capturing video stream from camera", type=str, default='/home/pereiraa/projects/security-barrier-python/security_barrier/test_video.mp4')
     args.add_argument("-d", "--device", help="Optional. Specify the target device to infer on; CPU, GPU, FPGA, HDDL, MYRIAD or HETERO: is "
                            "acceptable. The sample will look for a suitable plugin for device specified. Default "
                            "value is CPU", default="MYRIAD", type=str)
