@@ -46,9 +46,7 @@ def main():
 
     # -------------------- Parse args --------------------- #
     args = build_argparser().parse_args()
-    rootDir = os.path.dirname(os.path.realpath(__file__))
     device = args.device
-    precision = 'FP16' if device == 'MYRIAD' else 'FP32'
        
     if args.input == 'cam':
         inputStream = 0
@@ -77,7 +75,7 @@ def main():
     inferencePipeline.run()
     inferencePipeline.close()
     # Statistics wont work until timers are multi-processed
-    #inferencePipeline.printStatistics()
+    #inferencePipeline.printStatistics(renderer.timers)
 
 
 if __name__ == '__main__':

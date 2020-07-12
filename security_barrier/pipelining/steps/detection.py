@@ -46,7 +46,7 @@ class VehicleDetectionStep(PipelineStep):
 
         output = result["DetectionOutput_"]
         detectionResults = self._postprocessOutput(output, frame)
-        timers = {self.__class__.__name__: self.own_time.last}
+        timers = {self.__class__.__name__: {'own': self.own_time, 'total': self.total_time}}
         return frame, detectionResults, timers
 
 

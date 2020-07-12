@@ -31,21 +31,26 @@ TEXT_LEFT_MARGIN = 15
 
 class ResultRenderer(object):
     def __init__(self, display_fps=False, display_confidence=False, output_height=720):
-        #self.display_confidence = display_confidence
+        self.display_confidence = display_confidence
         self.display_fps = display_fps
         self.output_height = output_height
         self.meters = defaultdict(partial(WindowAverageMeter, 16))
+        self.timers = {}
         cv2.startWindowThread()
         print("To close the application, press 'CTRL+C' here or switch to the output window and press any key")
 
 
     def update_timers(self, timers):
-        self.meters['VehicleDetectionStep'].update(timers['VehicleDetectionStep'])
-        self.meters['VehicleAttributesStep'].update(timers['VehicleAttributesStep'])
-        return self.meters['VehicleDetectionStep'].avg + self.meters['VehicleAttributesStep'].avg
+        self.timers = timers
+
+        self.meters['VehicleDetectionStepOwn'].update(timers['VehicleDetectionStep']['own'].last)
+        self.meters['VehicleDetectionStepTotal'].update(timers['VehicleDetectionStep']['total'].last)
+        self.meters['VehicleAttributesStepOwn'].update(timers['VehicleAttributesStep']['own'].last)
+        self.meters['VehicleAttributesStepTotal'].update(timers['VehicleAttributesStep']['total'].last)
+        return self.meters['VehicleDetectionStepTotal'].avg + self.meters['VehicleAttributesStepTotal'].avg
 
 
-    def render_frame(self, frame, detection_results, attributes_results, timers, frame_ind):
+    def render_frame(self, frame, detection_results, attributes_results, timers, frame_idx):
         inference_time = self.update_timers(timers)
         # Render detected vehicles
         color = (0, 255, 0) # Green
@@ -66,11 +71,13 @@ class ResultRenderer(object):
         if self.display_fps:
             fps = 1000 / (inference_time + 1e-6)
             text_loc = (TEXT_LEFT_MARGIN, TEXT_VERTICAL_INTERVAL)
-            cv2.putText(frame, "Inference time: {:.2f}ms ({:.2f} FPS)".format(inference_time, fps), text_loc, FONT_STYLE, FONT_SIZE, FONT_COLOR)
+            cv2.putText(frame, "Avg Inference time: {:.2f}ms ({:.2f} FPS)".format(inference_time, fps), text_loc, FONT_STYLE, FONT_SIZE, FONT_COLOR)
 
+        status = 0
         cv2.imshow("Vehicle Detection", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            return -1
+            status = -1
+        return status
 
 
     def render_vehicle(self, vehicle, attributes, color, frame):

@@ -40,7 +40,7 @@ class RenderStep(PipelineStep):
             return
         self._sync_time()
 
-        frame, detection_results, attributes_results, timers = item
+        #frame, detection_results, attributes_results, timers = item
         render_start = time.time()
         status = self.render(*item, self._frames_processed)
         self._render_time.update(time.time() - render_start)
@@ -48,6 +48,7 @@ class RenderStep(PipelineStep):
         self._frames_processed += 1
         if status is not None and status < 0:
             return Signal.STOP_IMMEDIATELY
+
         return status
 
 

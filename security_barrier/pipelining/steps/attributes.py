@@ -57,7 +57,7 @@ class VehicleAttributesStep(PipelineStep):
                 attributes_results.append(self._postprocessOutput(result))
 
         #TODO: Frame post processing?
-        timers[self.__class__.__name__] = self.own_time.last
+        timers[self.__class__.__name__] = {'own': self.own_time, 'total': self.total_time}
         return frame, detection_results, attributes_results, timers
 
 

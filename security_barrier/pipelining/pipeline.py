@@ -83,10 +83,9 @@ class Pipeline(object):
             step.join()
 
 
-    def printStatistics(self):
-        for name, step in chain(self.syncSteps.items(), self.asyncSteps.items(), ):
-            print("{} total: {}".format(name, step.total_time))
-            print("{}   own: {}".format(name, step.own_time))
+    def printStatistics(self, timers):
+        for name, timer in timers.items():
+            print("{}: {}".format(name, timer))
 
 
     def addExtraAsyncStep(self, name, step):

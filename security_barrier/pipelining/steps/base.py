@@ -30,8 +30,8 @@ class PipelineStep(object):
         self.isLastAsyncStep = False
 
         self.timers = TimerGroup()
-        self.total_time = IncrementalTimer()
-        self.own_time = IncrementalTimer()
+        self.total_time = None #IncrementalTimer()
+        self.own_time = None #IncrementalTimer()
         self._start_t = None
 
 
